@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <title>Socket To Me</title>
+</head>
+<body>
+    <h1 id="title">Socket IO Practice</h1>
+    <input id="name-input" type="text" placeholder="username" />
+    <br>
+    <input id="message-input" type="text" placeholder="Message" />
+    <button id="send-btn">Send message</button>
+
+    <ul>
+
+    </ul>
+
+    <script>
+        var socket = io()
+        var messageInput = document.querySelector('#message-input')
+        var nameInput = document.querySelector('#name-input')
+        var btn = document.querySelector('#send-btn')
+
+        btn.addEventListener('click', () => {
+            console.log("message being sent")
+            socket.emit('new-message', {input: messageInput.value, name: nameInput.value})            
+        })
+
+        socket.on('broadcast-message', (message) => {
+            $("ul").append(`<li>${message.input} -${message.name}</li>`)
+            $('#message-input').val('')
+        })
+
+        //jquery append message
+
+        socket.on('new-user-connection', (data) => {
+            console.log("A new player has joined")
+            console.log(data)
+        })
+    </script>
+</body>
+</html>
