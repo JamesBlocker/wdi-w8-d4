@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      #paint {
+        height: 500px;
+        width: 500px;
+        border: 1px solid #444;
+        margin: 0 auto;
+      }
+    </style>
+    <title>Picasso Jr</title>
+  </head>
+  <body>
+  	<div id="paint">
+  		<canvas id="myCanvas"></canvas>
+    </div>
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var ctx = canvas.getContext('2d');
+      
+      var painting = document.getElementById('paint');
+      var paint_style = getComputedStyle(painting);
+      canvas.width = parseInt(paint_style.getPropertyValue('width'));
+      canvas.height = parseInt(paint_style.getPropertyValue('height'));
+
+      var mouse = {x: 0, y: 0};
+      
+      canvas.addEventListener('mousemove', function(e) {
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+      }, false);
+
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#00CC99';
+      
+      canvas.addEventListener('mousedown', function(e) {
+          ctx.beginPath();
+          ctx.moveTo(mouse.x, mouse.y);
+      
+          canvas.addEventListener('mousemove', onPaint);
+      }, false);
+      
+      canvas.addEventListener('mouseup', function() {
+          canvas.removeEventListener('mousemove', onPaint);
+      }, false);
+ 
+      var onPaint = function() {
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+      };
+    </script>
+  </body>
+</html>       
